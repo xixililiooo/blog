@@ -1,0 +1,95 @@
+{%extends 'layout.html'%}
+
+{%block content%}
+    <div class="listBox">
+        <h1>{{content.title}}</h1>
+        <p class="colDefault">
+            作者：<span class="colInfo">{{content.user}}</span> -
+            时间：<span class="colInfo">{{content.addtime|date('Y年m月d日 H:i:s', -8*60)}}</span> -
+            阅读：<span class="colInfo">{{content.readcount}}</span> -
+            评论：<span class="colInfo">{{commentcount}}</span>
+        </p>
+        <dfn>
+            {{content.content}}
+        </dfn>
+    </div>
+
+    <div class="listBox message">
+        <h3 class="textLeft"><strong>评论</strong> <span class="em">一共有 <em id="messageCount">{{commentcount}}</em> 条评论</span></h3>
+
+        {% if userInfo.username %}
+        <p class="textLeft">zmouse</p>
+        <p class="textLeft clear">
+            <textarea id="messageContent"></textarea>
+            <input type="hidden" id="contentId" value="{{content.id}}">
+            <button id="messageBtn" class="submit">提交</button>
+        </p>
+        {%else%}
+        <p class="bgDanger" style="line-height: 30px;">你还没有登录，请先登录！</p>
+        {%endif%}
+
+        <div class="messageList">
+			{%for comment in comments%}
+				{%if !comments.length %}
+				<div class="messageBox">
+					<p>还没有评论</p>
+					</div>
+				
+				{%else%}
+		<!-- 		<span>{{comment.username}}</span>
+				<span>{{comment.time|date('Y年m月d日 H:i:s', -8*60)}}</span>
+				<div>{{comment.content}}</div> -->
+				
+				<div class="messageBox">
+                <p class="name clear"><span class="fl"></span>{{comment.username}}<span class="fr">{{comment.time|date('Y年m月d日 H:i:s', -8*60)}}</span></p>{{comment.content}}<p></p>
+                </div>
+				{%endif%}
+			{%endfor%}
+        </div>
+
+    <div class="pager">
+        <ul class="clear">
+
+            <li class="previous">
+
+                {%if page <= 1%}
+                <span>没有上一页了</span>
+                {%else%}
+                <a href="/view?contentid={{category}}&page={{page-1}}">上一页</a>
+                {%endif%}
+
+            </li>
+
+            {%if pages > 0%}
+            <li>
+                <strong>{{page}} / {{pages}}</strong>
+            </li>
+            {%endif%}
+
+            <li class="next">
+
+                {%if page >= pages%}
+                <span>没有下一页了</span>
+                {%else%}
+                <a href="/view?contentid={{category}}&page={{page+1}}">下一页</a>
+                {%endif%}
+
+            </li>
+
+        </ul>
+    </div>
+
+        <!--<div class="messageList">-->
+            <!--<div class="messageBox"><p>还没有留言</p></div>-->
+        <!--</div>-->
+
+        <!--<div class="messageList" style="display: block;">-->
+            <!--<div class="messageBox">-->
+                <!--<p class="name clear"><span class="fl">admin</span><span class="fr">2016年07月29日 17:24:01</span></p><p>哈哈</p>-->
+            <!--</div>-->
+        <!--</div>-->
+
+    </div>
+
+<script src="/public/js/comment.js"></script>
+{%endblock%}
